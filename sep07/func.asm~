@@ -1,0 +1,56 @@
+TITLE The tale of two bits
+        
+INCLUDE cs240.inc
+.8086
+
+DOSEXIT=4C00h
+DOS=21h
+	
+.data
+
+.code
+
+        ;; cx = min(ax, dx) 
+min PROC
+	pushf
+	cmp     ax, dx
+        jl      smaller
+        mov     cx, dx
+        jmp     done
+smaller:
+        mov     cx, ax
+        
+done:   
+	popf
+	ret
+min ENDP
+
+main PROC
+	mov     ax, @data
+        mov     ds, ax
+
+.data
+enternum        BYTE "Enter a number: ", 0
+.code
+;	mov     dx, OFFSET enternum
+;	call    ReadInt
+        mov     ax, dx
+	
+;	mov     dx, OFFSET enternum
+;	call    ReadInt
+
+        call    ReadInt
+        ;;  mov dx, dx
+
+        call    min
+        mov     dx, cx
+
+        call    WriteInt
+	
+        mov     ax, DOSEXIT
+        int     DOS
+        ret
+	
+
+main ENDP
+END main        
