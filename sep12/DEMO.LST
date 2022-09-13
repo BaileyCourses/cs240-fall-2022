@@ -1,0 +1,199 @@
+Microsoft (R) Macro Assembler Version 6.11		    09/12/22 13:49:39
+demo.asm						     Page 1 - 1
+
+
+				;;; Professor Bailey
+				;;; Fall 2022
+				
+				;;; Skeleton program
+				
+				include cs240.inc		; Include CS 240 library definitions
+			      C .NOLIST
+			      C .LIST
+			      C 
+					
+				;;; Standard DOS definitions
+				
+ = 4C00				DOSEXIT = 4C00h
+ = 0021				DOS = 21h
+				
+				.8086				; Restrict instructions to 8086
+				
+ 0000				.data
+					
+				;;; Place data definitions here
+				
+ 0000				.code				; Switch to the code segment
+				
+				;;; Place code here
+				
+				
+ 0000				min	PROC
+					;; BX = first operand
+					;; DX = second operand
+					;; returns AX (min of BX and DX)
+				
+ 0000  9C				pushf
+				
+ 0001  3B DA				cmp	bx, dx
+ 0003  7C 04				jl	bxisless
+				
+					;; bx >= dx
+					
+ 0005  8B C2				mov	ax, dx
+ 0007  EB 02				jmp	over
+					
+ 0009				bxisless:	
+ 0009  8B C3				mov	ax, bx
+					
+ 000B				over:	
+ 000B  9D				popf
+ 000C  C3				ret
+ 000D				min	ENDP
+				
+ 0000				.data	
+ 0000 48 65 6C 6C 6F 2C			sayHello BYTE "Hello, world!", 0
+       20 77 6F 72 6C 64
+       21 00
+ 000D				.code	
+					
+ 000D				bigHello PROC
+					;; AX = number of times to say hello
+					;; returns: none
+					
+ 000D  8B C8				mov	cx, ax
+ 000F				top:	
+ 000F  BA 0000 R			mov	dx, OFFSET sayHello
+ 0012  E8 0000 E			call	WriteString
+ 0015  E8 0000 E			call	Newline
+ 0018  E2 F5				loop	top
+					
+ 001A  C3				ret
+ 001B				bigHello ENDP
+					
+ 000E				.data
+ 000E 45 6E 74 65 72 20			prompt BYTE "Enter a number: ", 0
+       61 20 6E 75 6D 62
+       65 72 3A 20 00
+ 001F 54 68 65 20 6D 69			result BYTE "The minimum number is: ", 0
+       6E 69 6D 75 6D 20
+       6E 75 6D 62 65 72
+       20 69 73 3A 20 00
+ 001B				.code
+					
+				;;; Entry point for the program
+				
+ 001B				main PROC
+ 001B  B8 ---- R			mov	ax, @data	; Setup the data segment
+ 001E  8E D8				mov	ds, ax
+				
+					;; Start of DOS program...
+				
+ 0020  B8 0000				mov	ax, 0
+ 0023  E8 FFE7				call	bigHello
+				
+ 0026  EB 24				jmp	done
+					
+ 0028  BA 000E R			mov	dx, OFFSET prompt
+ 002B  E8 0000 E			call	WriteString
+ 002E  E8 0000 E			call	ReadInt		; Value left in DX
+				
+ 0031  8B C2				mov	ax, dx
+				
+ 0033  BA 000E R			mov	dx, OFFSET prompt
+ 0036  E8 0000 E			call	WriteString
+ 0039  E8 0000 E			call	ReadInt		; Value left in DX
+				
+ 003C  8B D8				mov	bx, ax
+				
+ 003E  E8 FFBF				call	min
+				
+ 0041  BA 001F R			mov	dx, OFFSET result
+ 0044  E8 0000 E			call	WriteString
+				
+ 0047  8B D0				mov	dx, ax
+					
+ 0049  E8 0000 E			call	WriteInt
+				
+				;	call	DumpRegs
+ 004C				done:	
+				
+ 004C  B8 4C00				mov	ax, DOSEXIT	; Signal DOS that we are done
+ 004F  CD 21				int	DOS
+ 0051				main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 6.11		    09/12/22 13:49:39
+demo.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0037	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0200	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0051	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+DumpLongRegs . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpMem  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpRegs . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+NewLine  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+PrintVersion . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadChar . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexByte  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexDigit . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexDoubleWord  . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexWord  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadInt  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadLine . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadUInt . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+SkipToEOL  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Version  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteBit . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteCSString  . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteChar  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexByte . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexDigit  . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexDoubleWord . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexWord . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteInt . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteString  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteUInt  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+bigHello . . . . . . . . . . . .	P Near	 000D	  _TEXT	Length= 000E Public STDCALL
+  top  . . . . . . . . . . . . .	L Near	 000F	  _TEXT	
+main . . . . . . . . . . . . . .	P Near	 001B	  _TEXT	Length= 0036 Public STDCALL
+  done . . . . . . . . . . . . .	L Near	 004C	  _TEXT	
+min  . . . . . . . . . . . . . .	P Near	 0000	  _TEXT	Length= 000D Public STDCALL
+  bxisless . . . . . . . . . . .	L Near	 0009	  _TEXT	
+  over . . . . . . . . . . . . .	L Near	 000B	  _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0003h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+DOSEXIT  . . . . . . . . . . . .	Number	 4C00h	 
+DOS  . . . . . . . . . . . . . .	Number	 0021h	 
+prompt . . . . . . . . . . . . .	Byte	 000E	  _DATA	
+result . . . . . . . . . . . . .	Byte	 001F	  _DATA	
+sayHello . . . . . . . . . . . .	Byte	 0000	  _DATA	
+
+	   0 Warnings
+	   0 Errors
