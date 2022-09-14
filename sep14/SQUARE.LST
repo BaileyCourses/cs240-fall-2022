@@ -1,0 +1,149 @@
+Microsoft (R) Macro Assembler Version 6.11		    09/14/22 13:36:27
+square.asm						     Page 1 - 1
+
+
+				;;; Professor Bailey
+				;;; Fall 2022
+				;;; September 14, 2022
+				
+				include cs240.inc		; Include CS 240 library definitions
+			      C .NOLIST
+			      C .LIST
+			      C 
+					
+				;;; Standard DOS definitions
+				
+ = 4C00				DOSEXIT = 4C00h
+ = 0021				DOS = 21h
+				
+				.8086				; Restrict instructions to 8086
+				
+ 0000				.data
+					
+				;;; Place data definitions here
+				
+ 0000				.code				; Switch to the code segment
+				
+				;;; Place code here
+				
+ 0000				square PROC
+					;; AX = value to square
+					;; returns square in AX
+					
+ 0000  9C				pushf
+ 0001  52				push	dx
+					
+ 0002  F7 E8				imul	ax		; DX:AX = AX * AX
+				
+ 0004  5A				pop	dx
+ 0005  9D				popf
+ 0006  C3				ret
+ 0007				square ENDP
+				
+ 0000				.data
+ 0000 45 6E 74 65 72 20			prompt BYTE "Enter a number to square: ", 0
+       61 20 6E 75 6D 62
+       65 72 20 74 6F 20
+       73 71 75 61 72 65
+       3A 20 00
+ 001B 54 68 65 20 73 71			result BYTE "The square is ", 0
+       75 61 72 65 20 69
+       73 20 00
+ 0007				.code
+				
+				;;; Entry point for the program
+				
+ 0007				main PROC
+ 0007  B8 ---- R			mov	ax, @data	; Setup the data segment
+ 000A  8E D8				mov	ds, ax
+				
+					;; Start of DOS program...
+				
+					;; 	Ask for input
+ 000C  BA 0000 R			mov	dx, OFFSET prompt
+ 000F  E8 0000 E			call	WriteString
+ 0012  E8 0000 E			call	ReadUInt	; DX = input
+					
+ 0015  8B C2				mov	ax, dx
+ 0017  E8 FFE6				call	square		; AX = square of AX
+				
+ 001A  BA 001B R			mov	dx, OFFSET result
+ 001D  E8 0000 E			call	WriteString
+ 0020  8B D0				mov	dx, ax
+ 0022  E8 0000 E			call	WriteUInt	; Write DX
+ 0025  E8 0000 E			call	NewLine
+ 0028  E8 0000 E			call	DumpRegs
+					
+ 002B  B8 4C00				mov	ax, DOSEXIT	; Signal DOS that we are done
+ 002E  CD 21				int	DOS
+ 0030				main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 6.11		    09/14/22 13:36:27
+square.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 002A	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0200	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0030	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+DumpLongRegs . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpMem  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpRegs . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+NewLine  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+PrintVersion . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadChar . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexByte  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexDigit . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexDoubleWord  . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHexWord  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadInt  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadLine . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadUInt . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+SkipToEOL  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Version  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteBit . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteCSString  . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteChar  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexByte . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexDigit  . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexDoubleWord . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHexWord . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteInt . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteString  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteUInt  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 0007	  _TEXT	Length= 0029 Public STDCALL
+square . . . . . . . . . . . . .	P Near	 0000	  _TEXT	Length= 0007 Public STDCALL
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0003h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+DOSEXIT  . . . . . . . . . . . .	Number	 4C00h	 
+DOS  . . . . . . . . . . . . . .	Number	 0021h	 
+prompt . . . . . . . . . . . . .	Byte	 0000	  _DATA	
+result . . . . . . . . . . . . .	Byte	 001B	  _DATA	
+
+	   0 Warnings
+	   0 Errors
