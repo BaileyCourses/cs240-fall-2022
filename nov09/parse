@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+#  -*- python -*-
+
+import re
+
+# regex101.com
+
+class Line:
+    def __init__(self):
+        pass
+
+def parseLine(inFd):
+    lineInfo = Line()
+
+    line = inFd.readline()
+
+    if line == "":
+        return None
+
+    line = line.rstrip()
+
+    lineInfo.orig = line
+
+    code = line[:40].rstrip()
+
+    lineInfo.code = code
+
+    match = re.match(r"^\s*\..*", code, re.IGNORECASE)
+
+    if match:
+        lineInfo.comment = code
+        lineInfo.code = ""
+        return lineInfo
+
+    match = re.match(r"^\s*(?P<label>[a-z_][a-z0-9_]*):", code, re.IGNORECASE)
+
+    if match:
+        label = match.group("label")
+        print("Found a label:", label)
+
+    return lineInfo
+
+def main():
+    filename = "fig2.1.asm"
+
+    with open(filename, "r") as infile:
+        line = parseLine(infile)
+        while line is not None:
+            print(line.code)
+            line = parseLine(infile)
+            
+
+if __name__ == "__main__":
+    main()
+
+
+
+    
